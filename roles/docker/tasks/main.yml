@@ -1,0 +1,42 @@
+---
+# tasks file for docker
+- name: Install docker pre-req packages
+  apt: name={{ item }} state=installed update_cache=yes force=yes
+  with_items: "{{ packages }}"
+
+- name: Disable app armor
+  command: /etc/init.d/apparmor stop
+
+- name: Install jq
+  apt: name=jq state=installed update_cache=true force=yes
+
+- name: Download Key
+  apt_key:
+    url: "https://download.docker.com/linux/ubuntu/gpg"
+    state: present
+
+- name: Adding Docker Repository
+  apt_repository: >
+    repo='deb [arch=amd64] https://download.docker.com/linux/ubuntu
+    $(lsb_release -cs) stable' state=absent update_cache='yes'
+  register: result
+
+- name: Install docker-ce
+  apt: name=docker-ce force=yes update_cache=yes
+  when: result|success
+
+- command: whoami
+  register: user_name
+
+- name: Add group docker
+  group:
+    name: docker
+    state: present
+  register: result
+
+- name: Add user to docker group
+  user:
+    name: "{{ user_name.stdout }}"
+    groups: docker
+    append: yes
+  when: result|success

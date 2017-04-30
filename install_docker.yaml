@@ -1,0 +1,6 @@
+- name: Installing Docker Engine on hosts
+  hosts: "all"
+  become: "yes"
+  remote_user: "vagrant"
+  roles:
+    - {role: docker}

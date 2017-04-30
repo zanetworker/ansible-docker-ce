@@ -1,0 +1,6 @@
+
+[all]
+docker1 ansible_user=vagrant
+docker2 ansible_user=vagrant
+docker3 ansible_user=vagrant
+docker4 ansible_user=vagrant

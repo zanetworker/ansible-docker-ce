@@ -1,0 +1,8 @@
+---
+packages:
+  - vim
+  - htop
+  - tmux
+  - apt-transport-https
+  - ca-certificates
+  - curl

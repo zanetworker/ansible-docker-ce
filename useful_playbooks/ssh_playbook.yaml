@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: scan and register
+      command: "ssh-keyscan {{ item }}"
+      register: "host_keys"
+      changed_when: false
+      with_items: '{{ groups.all }}'
+      delegate_to: localhost
+      become: false
+
+    - name: write keys
+      template:
+        src: "ssh-hosts.j2"
+        dest: "/etc/ssh/ssh_known_hosts"

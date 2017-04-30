@@ -1,0 +1,12 @@
+---
+packages:
+  - vim
+  - htop
+  - tmux
+  - docker.io
+  - jq
+  - traceroute
+  # - kubelet
+  # - kubeadm
+  # - kubectl
+  # - kubernetes-cni
