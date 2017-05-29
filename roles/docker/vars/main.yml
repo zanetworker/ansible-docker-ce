@@ -6,3 +6,4 @@ packages:
   - apt-transport-https
   - ca-certificates
   - curl
+docker_config_path: /etc/systemd/system/docker.service.d/

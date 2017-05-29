@@ -17,8 +17,9 @@
 
 - name: Adding Docker Repository
   apt_repository: >
-    repo='deb [arch=amd64] https://download.docker.com/linux/ubuntu
-    $(lsb_release -cs) stable' state=absent update_cache='yes'
+    repo='deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable'
+    state=present
+    update_cache='yes'
   register: result
 
 - name: Install docker-ce
@@ -40,3 +41,19 @@
     groups: docker
     append: yes
   when: result|success
+
+- name: Ensures {{ docker_config_path }} dir exists
+  file:
+    path: "{{ docker_config_path }}"
+    state: directory
+
+- name: Configure Docker Daemon
+  template:
+    src: docker.conf.j2
+    dest: "{{ docker_config_path }}/docker.conf"
+
+- name: Reload Daemon.
+  command: systemctl daemon-reload
+
+- name: Restart docker
+  command: systemctl restart docker
